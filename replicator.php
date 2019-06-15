@@ -76,8 +76,10 @@ class Grid {
         //calculate values
         $this->calculateGrid();
 
+        //output
+        $output = null;
         if ($print) {
-            $this->renderGrid();
+            $output = $this->renderGrid();
         }
 
         //finalize after printout
@@ -90,23 +92,28 @@ class Grid {
 
         $this->iteration++;
 
+        return $output;
+
     }
 
     public function renderGrid() {
-
+        $output = '';
         foreach ($this->range as $x) {
+            $line = '';
             foreach ($this->range as $y) {
                 $cell = $this->getCell($x,$y);
 
                 if ($cell->isNewOn()) {
-                    print 'x';
+                    $line.= '⬛';
                 }
                 else {
-                    print ' ';
+                    $line.= '⬜';
                 }
             }
-            print "\n";
+            $output.= "<div class='line'>{$line}</div>";
         }
+        $output.= "<hr>";
+        return $output;
     }
 }
 class Cell {
@@ -208,6 +215,8 @@ class Cell {
 }
 $pattern = new Grid();
 $pattern->initCell(0,0)->setOn(true);
+//$pattern->initCell(0,-1)->setOn(true);
+//$pattern->initCell(-1,0)->setOn(true);
 
 $grid = new Grid();
 
@@ -215,6 +224,11 @@ $grid = new Grid();
 $grid->initGrid($pattern);
 print "initial x\n";
 
-foreach (range(1,10) as $i) {
-    $grid->iterate();
+$out = '';
+foreach (range(1,20) as $i) {
+    $out .= "<div class='image'>{$grid->iterate()}</div>";
 }
+$out = "<style>.images{font-size: 6px;
+line-height: 8px;}</style><div class='images'>{$out}</div>";
+
+file_put_contents('/Users/Andris/Downloads/fred.htm', $out);
