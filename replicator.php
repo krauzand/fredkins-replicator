@@ -20,16 +20,20 @@ class Grid {
         foreach ($this->cells as &$cell) {
             $new_cell = new Cell($cell->getX(), $cell->getY(), $this);
             $new_cell->setOn($cell->isOn());
+            $new_cell->reset();
+
 
             $cell = $new_cell;
             $this->grid_cells[$cell->getX()][$cell->getY()] = $cell;
         }
+
         $this->setSize();
-        $this->iterate();
     }
 
     protected function setSize() {
         $this->size = count($this->grid_cells);
+        $this->offset = ($this->size - 1) / 2;
+        $this->range = range(-$this->offset, $this->offset);
     }
 
     public function initCell(int $x, int $y): Cell {
@@ -40,30 +44,48 @@ class Grid {
         return $this->grid_cells[$x][$y];
     }
 
+    public function existsCell($x, $y){
+        return array_key_exists($x, $this->grid_cells) && array_key_exists($y, $this->grid_cells[$x]);
+    }
+
     public function getCell(int $x, int $y): Cell {
-        if (!isset($this->grid_cells[$x][$y])) {
-            $this->initCell($x, $y);
-        }
         return $this->grid_cells[$x][$y];
     }
 
-    public function iterate() {
-        $this->offset = ($this->size - 1) / 2;
-        $this->range = range(-$this->offset, $this->offset);
-        $this->renderGrid();
-
+    protected function extendGrid() {
         foreach ($this->cells as $cell) {
-            if ($cell->isNewOn()){
-                $cell->setOn(true);
-            }
-            $cell->calculate();
+            $cell->nextIteration();
         }
         $this->setSize();
+    }
 
+    protected function calculateGrid() {
         foreach ($this->cells as $cell) {
+            //if ready for re-calc
             if ($cell->isNewOn() === null) {
                 $cell->calculate();
             }
+        }
+    }
+
+    public function iterate($print = true) {
+
+        //extend
+        $this->extendGrid();
+
+        //calculate values
+        $this->calculateGrid();
+
+        if ($print) {
+            $this->renderGrid();
+        }
+
+        //finalize after printout
+        foreach ($this->cells as $cell) {
+            //if ($cell->isNewOn() !==  null) {
+                $cell->setOn($cell->isNewOn());
+            //}
+            $cell->reset();
         }
 
         $this->iteration++;
@@ -80,9 +102,8 @@ class Grid {
                     print 'x';
                 }
                 else {
-                    print '_';
+                    print ' ';
                 }
-                //$cell->reset();
             }
             print "\n";
         }
@@ -105,7 +126,6 @@ class Cell {
 
     public function setOn(bool $on) {
         $this->on = $on;
-        $this->new_on = $on;
     }
 
     public function __construct(int $x, int $y, Grid $grid)
@@ -145,28 +165,56 @@ class Cell {
         $this->grid = $grid;
     }
 
+    public function nextIteration() {
+        foreach(range(-1, 1) as $x_prim){
+            foreach(range(-1,1) as $y_prim){
+                $x = $this->x+$x_prim;
+                $y = $this->y+$y_prim;
+                if (!$this->getGrid()->existsCell($x,$y)) {
+                    $this->getGrid()->initCell($x, $y);
+                }
+            }
+        }
+
+    }
+
     public function calculate() {
         $on_count = 0;
         foreach(range(-1, 1) as $x_prim){
             foreach(range(-1,1) as $y_prim){
-                $cell = $this->grid->getCell($this->x+$x_prim, $this->y+$y_prim);
-                if ($cell->isOn() && $cell !== $this) {
-                    $on_count++;
+                $x = $this->x+$x_prim;
+                $y = $this->y+$y_prim;
+                if ($this->grid->existsCell($x, $y)) {
+                    $cell = $this->grid->getCell($x, $y);
+                    if ($cell->isOn() && $cell !== $this) {
+                        $on_count++;
+                    }
                 }
             }
         }
         $this->new_on = $on_count > 0 && $on_count % 2 === 1;
+        return $this->new_on;
     }
 
     public function reset()
     {
-        $this->new_on = false;
+        $this->new_on = null;
+    }
+
+    public function setNewOn(bool $isOn)
+    {
+        $this->new_on = $isOn;
     }
 }
 $pattern = new Grid();
 $pattern->initCell(0,0)->setOn(true);
 
 $grid = new Grid();
+
+//zero iteration
 $grid->initGrid($pattern);
-$grid->iterate();
-$grid->iterate();
+print "initial x\n";
+
+foreach (range(1,10) as $i) {
+    $grid->iterate();
+}
