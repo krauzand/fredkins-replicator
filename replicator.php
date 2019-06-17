@@ -105,11 +105,10 @@ class Grid {
 
                 if ($cell->isNewOn()) {
                     //$line.= '⬛';
-//                    $line.= '➕';
-                    //$line.= '⏰';
-                    $line.= '‍';
+                    $line.= '💩‍';
                 }
                 else {
+                    //$line.= '⬜';
                     $line.= '👻';
                 }
             }
