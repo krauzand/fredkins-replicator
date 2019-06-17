@@ -104,10 +104,13 @@ class Grid {
                 $cell = $this->getCell($x,$y);
 
                 if ($cell->isNewOn()) {
-                    $line.= '⬛';
+                    //$line.= '⬛';
+//                    $line.= '➕';
+                    //$line.= '⏰';
+                    $line.= '‍';
                 }
                 else {
-                    $line.= '⬜';
+                    $line.= '👻';
                 }
             }
             $output.= "<div class='line'>{$line}</div>";
@@ -214,8 +217,47 @@ class Cell {
     }
 }
 $pattern = new Grid();
-$pattern->initCell(0,0)->setOn(true);
+$max_iterations = 30;
+/* 1x1 square */
+//$pattern->initCell(0,0)->setOn(true);
+
+/* 3x3 cross */
+//$pattern->initCell(0,0)->setOn(true);
+//$pattern->initCell(-1,0)->setOn(true);
+//$pattern->initCell(1,0)->setOn(true);
+//$pattern->initCell(0,1)->setOn(true);
 //$pattern->initCell(0,-1)->setOn(true);
+//$pattern->initCell(1,-1)->setOn(false);
+//$pattern->initCell(-1,-1)->setOn(false);
+//$pattern->initCell(-1,1)->setOn(false);
+//$pattern->initCell(1,1)->setOn(false);
+
+/* 3x3 square */
+//$pattern->initCell(0,0)->setOn(true);
+////$pattern->initCell(-1,0)->setOn(true);
+////$pattern->initCell(1,0)->setOn(true);
+////$pattern->initCell(0,1)->setOn(true);
+////$pattern->initCell(0,-1)->setOn(true);
+////$pattern->initCell(1,-1)->setOn(true);
+////$pattern->initCell(-1,-1)->setOn(true);
+////$pattern->initCell(-1,1)->setOn(true);
+////$pattern->initCell(1,1)->setOn(true);
+///
+/* 3x3 five */
+$pattern->initCell(-1,-1)->setOn(true);
+$pattern->initCell(-1,0)->setOn(false);
+$pattern->initCell(-1,1)->setOn(true);
+$pattern->initCell(0,-1)->setOn(false);
+$pattern->initCell(0,0)->setOn(true);
+$pattern->initCell(0,1)->setOn(false);
+$pattern->initCell(1,-1)->setOn(true);
+$pattern->initCell(1,0)->setOn(false);
+$pattern->initCell(1,1)->setOn(true);
+
+
+
+//$pattern->initCell(0,0)->setOn(true);
+//$pattern->initCell(-1,0)->setOn(true);
 //$pattern->initCell(-1,0)->setOn(true);
 
 $grid = new Grid();
@@ -225,10 +267,11 @@ $grid->initGrid($pattern);
 print "initial x\n";
 
 $out = '';
-foreach (range(1,20) as $i) {
+foreach (range(1, $max_iterations) as $i) {
+    print $i;
     $out .= "<div class='image'>{$grid->iterate()}</div>";
 }
 $out = "<style>.images{font-size: 6px;
 line-height: 8px;}</style><div class='images'>{$out}</div>";
 
-file_put_contents('/Users/Andris/Downloads/fred.htm', $out);
+file_put_contents('/Users/Andris/Downloads/fred3x3-5.htm', $out);
