@@ -1,6 +1,10 @@
 
 <?php
 class Grid {
+    //const ON = '⬛';
+    //const OFF = '⬜';
+    const ON = '🎃';
+    const OFF = '💩';
     protected $grid_cells = [];
     /**
      * @var Cell[]
@@ -104,12 +108,12 @@ class Grid {
                 $cell = $this->getCell($x,$y);
 
                 if ($cell->isNewOn()) {
-                    //$line.= '⬛';
-                    $line.= '💩‍';
+                    $line.= self::ON;
+                    //$line.= '♞‍';
                 }
                 else {
-                    //$line.= '⬜';
-                    $line.= '👻';
+                    $line.= self::OFF;
+                    //$line.= '♘';
                 }
             }
             $output.= "<div class='line'>{$line}</div>";
@@ -216,7 +220,7 @@ class Cell {
     }
 }
 $pattern = new Grid();
-$max_iterations = 30;
+
 /* 1x1 square */
 //$pattern->initCell(0,0)->setOn(true);
 
@@ -253,6 +257,16 @@ $pattern->initCell(1,-1)->setOn(true);
 $pattern->initCell(1,0)->setOn(false);
 $pattern->initCell(1,1)->setOn(true);
 
+/* 3x3 five */
+$pattern->initCell(-1,-1)->setOn(true);
+$pattern->initCell(-1,0)->setOn(false);
+$pattern->initCell(-1,1)->setOn(false);
+$pattern->initCell(0,-1)->setOn(false);
+$pattern->initCell(0,0)->setOn(true);
+$pattern->initCell(0,1)->setOn(false);
+$pattern->initCell(1,-1)->setOn(false);
+$pattern->initCell(1,0)->setOn(false);
+$pattern->initCell(1,1)->setOn(true);
 
 
 //$pattern->initCell(0,0)->setOn(true);
@@ -264,6 +278,8 @@ $grid = new Grid();
 //zero iteration
 $grid->initGrid($pattern);
 print "initial x\n";
+
+$max_iterations = 32;
 
 $out = '';
 foreach (range(1, $max_iterations) as $i) {
