@@ -4,7 +4,7 @@ class Grid {
     //const ON = '⬛';
     //const OFF = '⬜';
     const ON = '🎃';
-    const OFF = '💩';
+    const OFF = '💩';//credits to five year old daughter Gundega
     protected $grid_cells = [];
     /**
      * @var Cell[]
