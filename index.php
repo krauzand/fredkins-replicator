@@ -39,23 +39,7 @@ include('src/Grid.php');
 include('src/Cell.php');
 include('src/PatternFactory.php');
 
-//$pattern = PatternFactory::pattern3x3Five();
-//
-$pattern = PatternFactory::pattern3x3Cross();
-switch ($pattern_index) {
-    case 1:
-        $pattern = PatternFactory::pattern1x1();
-        break;
-    case 2:
-        $pattern = PatternFactory::pattern3x3DiceFive();
-        break;
-    case 3:
-        $pattern = PatternFactory::pattern3x3Diagonal();
-        break;
-    case 4:
-        $pattern = PatternFactory::pattern3x3Cross();
-        break;
-}
+$pattern = PatternFactory::choose($pattern_index);
 
 $grid = new Grid();
 
