@@ -33,7 +33,7 @@ $patterns = [
         Pattern
         <select name="pattern">
             <?php foreach ($patterns as $i => $pattern):?>
-                <option value="<?= $i?>" <?= $i == $pattern_index ? 'selected' : '' ?>><?= $pattern ?></option>
+                <option value="<?= $i?>" <?= $i == $pattern_index ? 'selected' : '' ?>><?= "{$i}) {$pattern}" ?></option>
             <?php endforeach;?>
         </select>
     </label>
