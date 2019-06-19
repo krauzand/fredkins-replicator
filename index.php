@@ -2,8 +2,8 @@
 $max_iterations = $_GET['iterations'] ?? 15;
 $max_iterations = min($max_iterations, 35);
 $print_only = null;
-$on = $_GET['on'] ?? '⬛';
-$off = $_GET['off'] ?? '⬜';
+$on = empty($_GET['on']) ? '⬛' : $_GET['on'];
+$off = empty($_GET['off']) ? '⬜' : $_GET['off'];
 $pattern_index = $_GET['pattern'] ?? 4;
 $patterns = [1 => '1x1', 2 => '3x3 Dice Five', 3 => '3x3 Diagonal', 4 => '3x3 Cross']
 ?>
@@ -45,7 +45,7 @@ $grid = new Grid();
 
 //zero iteration
 $grid->initGrid($pattern, $on, $off);
-print "{$on}\n";
+print "{$on} {$off}\n";
 print "<hr>";
 
 $out = '';
