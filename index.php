@@ -5,7 +5,14 @@ $print_only = null;
 $on = empty($_GET['on']) ? '⬛' : $_GET['on'];
 $off = empty($_GET['off']) ? '⬜' : $_GET['off'];
 $pattern_index = $_GET['pattern'] ?? 4;
-$patterns = [1 => '1x1', 2 => '3x3 Dice Five', 3 => '3x3 Diagonal', 4 => '3x3 Cross']
+$patterns = [
+    1 => '1x1',
+    2 => '3x3 Dice Five',
+    3 => '3x3 Diagonal',
+    4 => '3x3 Cross',
+    5 => '3x3 Cross Empty',
+    6 => '3x3 ZL Shape',
+];
 ?>
 <form>
     <label>
